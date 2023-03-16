@@ -1,0 +1,101 @@
+#Telescopedia (hard) -- by Andrew Diep
+
+#Primary Variables:
+telescope = 'o)=(o*)>*)*)=3'
+wrongLetters = []
+win = False
+n = 0
+
+#Helper Functions:
+def makeTextField(str):
+  textField = []
+  for i in range(len(str)):
+    textField.append('_')
+  return textField
+
+def makeWordList(str):
+  wordField = []
+  for l in str:
+    wordField.append(l)
+  return wordField
+
+#Introduction:
+print(' ~~ o)=(o*)>*)*)=3 ~~ ')
+print('Welcome to Telescopedia (hard), a goldfish version of Hangman.')
+theWord = input('Please enter a word for the other person to guess: ').lower()
+while(not theWord.isalpha()):
+  theWord = input('Please enter only alphabetical letters: ').lower()
+theCategory = input('Give an optional category: ')
+theHint = input('Give the other player a hint when they reached 2 *Pops*: ')
+
+#Setup
+theWordArr = makeWordList(theWord)
+textField = makeTextField(theWord)
+
+for i in range(50):
+  print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+print()
+print('RULES:')
+print(' - You have until 4 *Pops* to guess the word.')
+print(' - Each guess should be one alphabetical letter only.')
+print(' - You will get a hint at the 2nd *Pop*. GLHF!')
+print()
+print("Category: %s" % (theCategory))
+print()
+
+#The Guess
+
+while(n < 4):
+
+  theGuess = input('Enter a letter: ').lower()
+
+  while(not theGuess.isalpha() or len(theGuess) != 1 or theGuess in wrongLetters):
+    print('Input must be one alphabetical letter that you have not guessed.')
+    print()
+    theGuess = input('Enter a letter: ').lower()
+
+  correctGuess = False
+
+  for i in range(len(theWord)):
+    if(theGuess in theWord[i]):
+      textField[i] = theGuess
+      correctGuess = True
+
+  if(textField == theWordArr):
+    print()
+    print(" ".join(textField))
+    print()
+    print("YOU WIN")
+    win = True
+    break
+
+  if(not correctGuess):
+    n+=1
+    print()
+    print("* Pop #%d! *" % (n))
+    print()
+    wrongLetters.append(theGuess)
+    print(" ".join(textField))
+    print()
+    if(n == 1):
+      print(" ~~ " + telescope[:5] + " ~~ ")
+    if(n == 2):
+      print(" ~~ " + telescope[:8] + " ~~ ")
+      print("HINT: %s" % (theHint))
+    if(n == 3):
+      print(" ~~ " + telescope[:12] + " ~~ ")
+    if(n == 4):
+      print(" ~~ " + telescope + " ~~ ")
+
+    print("Letters that aren't included: %s" % (", ".join(wrongLetters)))
+    print()
+  else:
+    print()
+    print(" ".join(textField))
+    print()
+
+
+if(not win):
+  print("YOU LOSE")
+  print("The word was: %s" % (theWord))
+
